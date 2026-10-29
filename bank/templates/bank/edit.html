@@ -1,0 +1,9 @@
+{% extends "bank/base.html" %}{% block content %}
+<p><a href="{% url 'document' s.document_id %}">&laquo; back</a></p>
+<h1>Question {{ s.source_question_number }} <small>(page {{ s.page_number }}, {{ s.get_review_status_display }})</small></h1>
+{% for f,m in s.validation.errors.items %}<p class="err">{{ f }}: {{ m }}</p>{% endfor %}
+{% for f,m in s.validation.warnings.items %}<p class="warn">{{ f }}: {{ m }}</p>{% endfor %}
+{% if s.flags %}<p class="warn">Extraction flags: {{ s.flags|join:", " }}</p>{% endif %}
+<form method="post">{% csrf_token %}{{ form.as_p }}<button>Save</button></form>
+<details><summary>Original extraction</summary><pre style="white-space:pre-wrap">{{ s.original }}</pre></details>
+{% endblock %}

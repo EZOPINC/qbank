@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Question Bank</title>
+    <style>
+        body {
+            font-family: system-ui, "Noto Sans Bengali", "Noto Sans Devanagari", sans-serif;
+            margin: 0;
+            color: #222
+        }
+
+        nav {
+            background: #1f3a5f;
+            padding: .6rem 1rem
+        }
+
+        nav a {
+            color: #fff;
+            margin-right: 1rem;
+            text-decoration: none
+        }
+
+        main {
+            padding: 1rem;
+            max-width: 1200px;
+            margin: auto
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%
+        }
+
+        td,
+        th {
+            border-bottom: 1px solid #ddd;
+            padding: .4rem;
+            text-align: left;
+            vertical-align: top
+        }
+
+        .wrap {
+            overflow-x: auto
+        }
+
+        .err {
+            color: #b00020
+        }
+
+        .warn {
+            color: #9a6700
+        }
+
+        .msg {
+            background: #eef;
+            padding: .5rem;
+            margin: .5rem 0
+        }
+
+        textarea,
+        input[type=text],
+        select {
+            width: 100%;
+            box-sizing: border-box
+        }
+    </style>
+</head>
+
+<body>
+    <nav><a href="{% url 'upload' %}">Upload</a><a href="{% url 'question_list' %}">Question bank</a><a
+            href="{% url 'history' %}">Import history</a><a href="/admin/">Admin</a>{% if user.is_authenticated %}<form
+            method="post" action="{% url 'logout' %}" style="display:inline;float:right">{% csrf_token %}<button
+                style="background:none;border:0;color:#fff;cursor:pointer">Log out ({{ user.username }})</button></form>
+        {% endif %}</nav>
+    <main>{% for m in messages %}<div class="msg">{{ m }}</div>{% endfor %}{% block content %}{% endblock %}</main>
+</body>
+
+</html>

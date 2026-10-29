@@ -1,0 +1,6 @@
+{% extends "bank/base.html" %}{% block content %}
+<h1>Upload question paper</h1>
+<form method="post" enctype="multipart/form-data">{% csrf_token %}{{ form.as_p }}<button>Upload &amp; extract</button></form>
+<h2>Recent uploads</h2><div class="wrap"><table><tr><th>File</th><th>Status</th><th>Uploaded</th></tr>
+{% for d in documents %}<tr><td><a href="{% url 'document' d.pk %}">{{ d.original_name }}</a></td><td>{{ d.status }}</td><td>{{ d.created_at }}</td></tr>{% endfor %}</table></div>
+{% endblock %}

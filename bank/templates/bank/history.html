@@ -1,0 +1,4 @@
+{% extends "bank/base.html" %}{% block content %}<h1>Import history</h1>
+{% for b in batches %}<details><summary>#{{ b.pk }} — {{ b.created_at }} — {{ b.succeeded }} imported / {{ b.skipped }} skipped / {{ b.failed }} failed</summary>
+<table>{% for r in b.report %}<tr><td>{{ r.number }}</td><td>{{ r.outcome }}</td><td>{{ r.reason }}</td></tr>{% endfor %}</table></details>{% empty %}<p>No imports yet.</p>{% endfor %}
+{% endblock %}

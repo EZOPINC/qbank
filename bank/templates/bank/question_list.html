@@ -1,0 +1,24 @@
+{% extends "bank/base.html" %}{% block content %}
+<h1>Question bank <small>({{ total }})</small></h1>
+<form method="get" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem">
+<input type="text" name="q" value="{{ f.q }}" placeholder="Search question text" style="width:14rem">
+<select name="language" style="width:auto"><option value="">All languages</option>{% for v,l in languages %}<option value="{{ v }}" {% if f.language == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
+<select name="exam" style="width:auto"><option value="">All exams</option>{% for e in exams %}<option value="{{ e.pk }}" {% if f.exam == e.pk|stringformat:"s" %}selected{% endif %}>{{ e.name }}</option>{% endfor %}</select>
+<input type="text" name="year" value="{{ f.year }}" placeholder="Year" style="width:6rem">
+<select name="answer" style="width:auto"><option value="">Any answer</option><option value="set" {% if f.answer == "set" %}selected{% endif %}>Answer set</option><option value="missing" {% if f.answer == "missing" %}selected{% endif %}>Answer missing</option></select>
+<select name="status" style="width:auto"><option value="">All statuses</option>{% for v,l in statuses %}<option value="{{ v }}" {% if f.status == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
+<button>Filter</button> <a href="{% url 'question_list' %}">Reset</a></form>
+{% for q in page %}
+<div style="border:1px solid #ddd;border-radius:6px;padding:.7rem;margin-bottom:.7rem">
+<div style="color:#666;font-size:.85rem">#{{ q.pk }} · {{ q.get_language_display }} · {{ q.get_review_status_display }}{% if q.source_question_number %} · source Q{{ q.source_question_number }}{% endif %}</div>
+<p style="white-space:pre-line;margin:.4rem 0"><b>{{ q.question_text }}</b></p>
+<ol type="A" style="margin:.3rem 0">{% for k,t in q.options %}<li {% if q.correct_answer == k %}style="color:#0a7a2f;font-weight:600"{% endif %}>{{ t }}{% if q.correct_answer == k %} ✓{% endif %}</li>{% endfor %}</ol>
+<div style="font-size:.85rem">{% if not q.correct_answer %}<span class="warn">Answer not set</span> · {% endif %}
+{% for c in q.exam_categories.all %}<span class="msg" style="padding:.1rem .4rem">{{ c.name }}</span> {% endfor %}
+{% for t in q.previous_year_tags.all %}<span class="msg" style="padding:.1rem .4rem">{{ t }}</span> {% endfor %}</div>
+{% if q.explanation %}<details><summary>Explanation</summary>{{ q.explanation }}</details>{% endif %}
+</div>{% empty %}<p>No questions found.</p>{% endfor %}
+<p>{% if page.has_previous %}<a href="?{{ qstring }}&page={{ page.previous_page_number }}">&laquo; prev</a>{% endif %}
+Page {{ page.number }}/{{ page.paginator.num_pages }}
+{% if page.has_next %}<a href="?{{ qstring }}&page={{ page.next_page_number }}">next &raquo;</a>{% endif %}</p>
+{% endblock %}
